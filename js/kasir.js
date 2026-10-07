@@ -5,6 +5,17 @@ const totalHarga = document.getElementById("total");
 let keranjang = [];
 let bukaMenu = false;
 
+const metodePembayaran = document.querySelectorAll('input[name="metode"]');
+const metode = document.getElementById("metode-dipilih");
+let metodeDipilih = "";
+
+metodePembayaran.forEach((radio) => {
+    radio.addEventListener("change", () => {
+        metodeDipilih = radio.value;
+        metode.textContent = metodeDipilih;
+    });
+});
+
 const inputBayar = document.getElementById("uang-bayar");
 const infoKembalian = document.getElementById("info-kembalian");
 
@@ -30,13 +41,13 @@ const tampilkanKeranjang = () => {
 
     keranjang.forEach((item) => {
         const p = document.createElement("p");
-        p.textContent = `${item.nama} x${item.jumlah}. Harga: Rp ${item.jumlah * item.harga}`;
+        p.textContent = `${item.nama} x${item.jumlah}; Harga: Rp ${item.jumlah * item.harga}`;
         total += item.jumlah * item.harga;
 
         const tombol = document.createElement("button");
         tombol.textContent = "Hapus dari Keranjang";
         tombol.addEventListener("click", () => {
-            keranjang = keranjang.filter(filter => filter !== item);
+            keranjang = keranjang.filter(k => k !== item);
             tampilkanKeranjang();
         });
 
@@ -60,7 +71,7 @@ const tambahkanKeKeranjang = (produkDipilih, qty) => {
         adaProduk.jumlah += +qty;
     } else {
         keranjang.push({ ...produkDipilih, jumlah: +qty });
-    }
+    };
 
     tampilkanKeranjang();
 };
@@ -132,7 +143,7 @@ produk.forEach((item) => {
         if (!bukaMenu) {
             bukaMenu = true;
             menuKeranjang(barisProduk, item);
-        }
+        };
     });
 
     [barisProduk, tombol].forEach((item2) => {
