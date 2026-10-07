@@ -5,6 +5,25 @@ const totalHarga = document.getElementById("total");
 let keranjang = [];
 let bukaMenu = false;
 
+const inputBayar = document.getElementById("uang-bayar");
+const infoKembalian = document.getElementById("info-kembalian");
+
+let totalSekarang = 0;
+
+const hitungKembalian = () => {
+    const selisih = +inputBayar.value - totalSekarang;
+
+    if (inputBayar.value === "") {
+        infoKembalian.textContent = "Kembalian: Rp 0";
+    } else if (selisih < 0) {
+        infoKembalian.textContent = `Uang kurang: Rp ${-selisih}`;
+    } else {
+        infoKembalian.textContent = `Kembalian: Rp ${selisih}`;
+    };
+};
+
+inputBayar.addEventListener("input", hitungKembalian);
+
 const tampilkanKeranjang = () => {
     wadahKeranjang.innerHTML = "";
     let total = 0;
@@ -12,11 +31,24 @@ const tampilkanKeranjang = () => {
     keranjang.forEach((item) => {
         const p = document.createElement("p");
         p.textContent = `${item.nama} x${item.jumlah}. Harga: Rp ${item.jumlah * item.harga}`;
-        wadahKeranjang.appendChild(p);
         total += item.jumlah * item.harga;
+
+        const tombol = document.createElement("button");
+        tombol.textContent = "Hapus dari Keranjang";
+        tombol.addEventListener("click", () => {
+            keranjang = keranjang.filter(filter => filter !== item);
+            tampilkanKeranjang();
+        });
+
+        [p, tombol].forEach((elemen) => {
+            wadahKeranjang.appendChild(elemen);
+        });
     });
 
     totalHarga.textContent = `${total}`;
+
+    totalSekarang = total;
+    hitungKembalian();
 };
 
 const tambahkanKeKeranjang = (produkDipilih, qty) => {
@@ -69,9 +101,9 @@ const menuKeranjang = (barisProduk, produkDipilih) => {
     const tombolTambahkan = document.createElement("button");
     tombolTambahkan.textContent = "Tambahkan";
     tombolTambahkan.addEventListener("click", () => {
-        tambahkanKeKeranjang(produkDipilih, input.value);
         tutupMenu();
-    });
+        tambahkanKeKeranjang(produkDipilih, input.value);
+    }); 
 
     const tombolBatal = document.createElement("button");
     tombolBatal.textContent = "Batal";
