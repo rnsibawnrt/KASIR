@@ -13,17 +13,22 @@
 
         <h2>KERANJANG</h2>
         <div id="keranjang"></div>
-        <h3> Total Rp <span id="total">0</span></h3>
+        <h3> Total: <span id="total">Rp 0</span></h3>
 
-        <div>Metode Pembayaran: <span id="metode-dipilih">Belum dipilih</span><br>
+        <div>Metode Pembayaran: <span id="metode-dipilih">Belum Dipilih</span><br>
             <label><input type="radio" name="metode" value="Cash">Cash</label>
             <label><input type="radio" name="metode" value="Qris">Qris</label>
             <label><input type="radio" name="metode" value="Transfer">Transfer</label>
         </div><br>
 
-        <label for="uang-bayar">Uang bayar : Rp</label>
+        <label for="uang-bayar">Uang bayar: Rp</label>
         <input type="number" id="uang-bayar" min="0">
         <h3 id="info-kembalian">Kembalian: Rp 0</h3>
+
+        <button id="konfirmasi-pesanan">Konfirmasi Pesanan</button>
+        <p id="info-konfirmasi">Tidak Ada Pesanan</p>
+        <h2>DAFTAR RIWAYAT PESANAN</h2>
+        <div id="riwayat-pesanan">Kosong</div>
 
         <script src="js/data.js"></script>
         <script src="js/kasir.js"></script>
