@@ -22,8 +22,20 @@ let inputPembayaran = 0;
 let dataTransaksi = [];
 let pemasukkan = 0;
 
+
 //ubah ke rupiah
-const rupiah = (angka) => `Rp ${angka.toLocaleString("id-ID")}`; 
+const rupiah = (angka) => `Rp ${angka.toLocaleString("id-ID")}`;
+
+
+//simpan data
+const transferData = () => {
+    const data = {
+        dataTransaksi,
+        pemasukkan
+    };
+
+    localStorage.setItem("data", JSON.stringify(data));
+};
 
 
 //reset kasir
@@ -40,7 +52,10 @@ const resetKasir = () => {
     });
     inputBayar.value = "";
     inputPembayaran = 0;
+
+    transferData();
 };
+
 
 //tampilkan riwayat transaksi
 const tampilkanTransaksi = () => {
@@ -50,7 +65,7 @@ const tampilkanTransaksi = () => {
         const p = document.createElement("p");
         p.style.whiteSpace = "pre-line";
 
-        p.textContent = 
+        p.textContent =
             `Pesanan Nomor: ${item.id} || ${item.tanggal}
             Produk: ${item.produk}
             Harga: ${rupiah(item.harga)} || Bayar: ${rupiah(item.bayar)}
@@ -59,6 +74,7 @@ const tampilkanTransaksi = () => {
         wadahRiwayat.appendChild(p);
     });
 };
+
 
 //riwayat transaksi
 const riwayatTransaksi = () => {
@@ -81,10 +97,6 @@ const riwayatTransaksi = () => {
     pemasukkan += totalSekarang;
     tampilkanTransaksi();
     resetKasir();
-
-    console.clear();
-    console.log(dataTransaksi);
-    console.log(`Pemasukkan: ${rupiah(pemasukkan)}`);
 };
 
 
@@ -114,6 +126,7 @@ metodePembayaran.forEach((radio) => {
     });
 });
 
+
 //hitung kembalian otomatis
 const hitungKembalian = () => {
     inputPembayaran = +inputBayar.value;
@@ -129,6 +142,7 @@ const hitungKembalian = () => {
 };
 
 inputBayar.addEventListener("input", hitungKembalian);
+
 
 //simpan produk ke keranjang dan menampilkan produk di keranjang
 const tampilkanKeranjang = () => {
@@ -160,6 +174,7 @@ const tampilkanKeranjang = () => {
     hitungKembalian();
 };
 
+
 const tambahkanKeKeranjang = (produkDipilih, qty) => {
     if (+qty <= 0) return;
 
@@ -176,6 +191,7 @@ const tambahkanKeKeranjang = (produkDipilih, qty) => {
 
     tampilkanKeranjang();
 };
+
 
 const menuKeranjang = (barisProduk, produkDipilih) => {
     const div1 = document.createElement("div");
@@ -215,7 +231,7 @@ const menuKeranjang = (barisProduk, produkDipilih) => {
     tombolTambahkan.addEventListener("click", () => {
         tutupMenu();
         tambahkanKeKeranjang(produkDipilih, input.value);
-    }); 
+    });
 
     const tombolBatal = document.createElement("button");
     tombolBatal.textContent = "Batal";
@@ -233,6 +249,7 @@ const menuKeranjang = (barisProduk, produkDipilih) => {
         barisProduk.appendChild(item);
     });
 };
+
 
 //menampilkan daftar produk
 produk.forEach((item) => {
@@ -253,8 +270,21 @@ produk.forEach((item) => {
     });
 });
 
+
 konfirmasiPesanan.addEventListener("click", () => {
     let statusVerif = verifikasiPesanan();
-    
+
     statusVerif ? riwayatTransaksi() : alert("Gagal Memuat Pesanan");
 });
+
+
+
+//muat data tersimpan saat halaman dibuka
+const dataTersimpan = JSON.parse(localStorage.getItem("data"));
+
+if (dataTersimpan) {
+    dataTransaksi = dataTersimpan.dataTransaksi || [];
+    pemasukkan = dataTersimpan.pemasukkan || 0;
+
+    if (dataTransaksi.length > 0) tampilkanTransaksi();
+}
