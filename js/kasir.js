@@ -274,7 +274,7 @@ produk.forEach((item) => {
 konfirmasiPesanan.addEventListener("click", () => {
     let statusVerif = verifikasiPesanan();
 
-    statusVerif ? riwayatTransaksi() : alert("Gagal Memuat Pesanan");
+    if (statusVerif) riwayatTransaksi();
 });
 
 
